@@ -1,0 +1,6 @@
+{
+  "name": "deep_",
+  "description": "Social networking platform featuring a global feed, real-time hashtag streams directory with reader rank progression levels, milestone vault badges, mate compatibility analysis, encrypted user profile storage, private messaging, PDF & poetry sharing, and integrated music library.",
+  "requestFramePermissions": ["accelerometer", "gyroscope", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
