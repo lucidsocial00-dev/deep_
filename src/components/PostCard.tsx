@@ -91,6 +91,7 @@ const fireTriggerButtonVariants: Variants = {
     scale: [1, 1.18, 0.94, 1.06, 1],
     rotate: [0, -3, 3, -1, 0],
     transition: {
+      type: 'keyframes',
       duration: 0.6,
       ease: [0.34, 1.56, 0.64, 1],
     },
@@ -99,16 +100,16 @@ const fireTriggerButtonVariants: Variants = {
 
 const flameIconVariants: Variants = {
   idle: { scale: 1, rotate: 0 },
-  hover: { scale: 1.15, rotate: [0, -6, 6, 0], transition: { duration: 0.3 } },
+  hover: { scale: 1.15, rotate: [0, -6, 6, 0], transition: { type: 'keyframes', duration: 0.3 } },
   active: {
     scale: [1.1, 1.22, 1.12, 1.2, 1.1],
     rotate: [0, -4, 4, -2, 0],
-    transition: { repeat: Infinity, duration: 2.2, ease: 'easeInOut' },
+    transition: { type: 'keyframes', repeat: Infinity, duration: 2.2, ease: 'easeInOut' },
   },
   igniting: {
     scale: [1, 1.55, 1.1, 1.35, 1.15],
     rotate: [0, -12, 12, -6, 0],
-    transition: { duration: 0.65, ease: 'easeOut' },
+    transition: { type: 'keyframes', duration: 0.65, ease: 'easeOut' },
   },
 };
 
@@ -133,7 +134,7 @@ const cardIgnitionTactilePulseVariants: Variants = {
   animate: {
     opacity: [0, 0.85, 0.35, 0.75, 0],
     scale: [0.99, 1.006, 1],
-    transition: { duration: 0.75, ease: 'easeOut' },
+    transition: { type: 'keyframes', duration: 0.75, ease: 'easeOut' },
   },
   exit: {
     opacity: 0,
@@ -179,7 +180,7 @@ interface PostCardProps {
   onLike: (postId: string) => void;
   onDislike: (postId: string) => void;
   onAddComment: (postId: string, content: string) => void;
-  onHashtagClick: (tag: string) => void;
+  onHashtagClick?: (tag: string) => void;
   onOpenPdf: (doc: PDFDocument) => void;
   onShareToChat?: (post: Post) => void;
   onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy') => void;
@@ -1382,7 +1383,7 @@ export const PostCard: React.FC<PostCardProps> = ({
                     '0 0 8px rgba(244,114,182,0.4)',
                   ],
                 } : {}}
-                transition={{ duration: 0.7, ease: 'easeOut' }}
+                transition={{ type: 'keyframes', duration: 0.7, ease: 'easeOut' }}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (onInspectCompatibility) onInspectCompatibility(post.authorId);
@@ -1946,7 +1947,7 @@ export const PostCard: React.FC<PostCardProps> = ({
                 if (onOpenReadingLink) onOpenReadingLink(l);
               }}
               isCompleted={isLinkClaimed(link)}
-              onHashtagClick={(tag) => onHashtagClick(tag)}
+              onHashtagClick={(tag) => onHashtagClick && onHashtagClick(tag)}
             />
           ))}
         </div>
@@ -2038,11 +2039,11 @@ export const PostCard: React.FC<PostCardProps> = ({
                         ? { scale: [1, 1.035, 0.99, 1] }
                         : { scale: 1 }
                     }
-                    transition={{
-                      type: 'spring',
-                      stiffness: 500,
-                      damping: 22,
-                    }}
+                    transition={
+                      optionBurstId === option.id
+                        ? { type: 'keyframes', duration: 0.38, ease: 'easeOut' }
+                        : { type: 'spring', stiffness: 500, damping: 22 }
+                    }
                     className={`w-full text-left relative overflow-hidden rounded-xl border transition-colors duration-200 group/opt cursor-pointer select-none ${
                       isSelected
                         ? isPostViralActive
@@ -2330,7 +2331,9 @@ export const PostCard: React.FC<PostCardProps> = ({
                   key={tag}
                   onClick={(e) => {
                     e.stopPropagation();
-                    onHashtagClick(clean);
+                    if (onHashtagClick) {
+                      onHashtagClick(clean);
+                    }
                   }}
                   className={`group/warp inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                     isPostViralActive
@@ -2840,7 +2843,7 @@ export const PostCard: React.FC<PostCardProps> = ({
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Read & Karma Points Action */}
+          {/* Read & Intellectual Points Action */}
           {onClaimReadingPoints && (
             <button
               onClick={(e) => {

@@ -370,7 +370,7 @@ export const HashtagGroupDetailModal: React.FC<HashtagGroupDetailModalProps> = (
 
             {/* User Standing & Group Stats Card */}
             <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
-              {/* User Karma Standing In Group */}
+              {/* User Intellectual Points Standing In Group */}
               <div className="p-3.5 rounded-2xl bg-black/75 border border-amber-500/40 backdrop-blur-md min-w-[200px] shadow-[0_0_15px_rgba(245,158,11,0.15)]">
                 <div className="flex items-center justify-between text-xs mb-1">
                   <span className="text-slate-400 font-medium">Your Standing</span>
@@ -906,7 +906,7 @@ export const HashtagGroupDetailModal: React.FC<HashtagGroupDetailModalProps> = (
           {activeSubTab === 'readings' && (
             <div className="space-y-6">
               
-              {/* Reading Karma & Link Engine Banner */}
+              {/* Reading Intellectual Points & Link Engine Banner */}
               <div className="p-6 rounded-3xl bg-gradient-to-r from-pink-950/60 via-neutral-900 to-purple-950/60 border border-pink-500/40 space-y-4 shadow-[0_0_30px_rgba(236,72,153,0.15)]">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1">
@@ -916,7 +916,7 @@ export const HashtagGroupDetailModal: React.FC<HashtagGroupDetailModalProps> = (
                         <span>Reading Stream & Points</span>
                       </span>
                       <span className="text-xs text-amber-300 font-semibold font-mono">
-                        Earn karma points
+                        Earn intellectual points
                       </span>
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-white">

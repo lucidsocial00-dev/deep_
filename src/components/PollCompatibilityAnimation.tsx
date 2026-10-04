@@ -162,7 +162,7 @@ export const PollCompatibilityAnimation: React.FC<PollCompatibilityAnimationProp
               scale: [1, 1.25, 0.95, 1.15, 1],
               rotate: [0, -8, 8, -4, 0],
             }}
-            transition={{ duration: 1.4, ease: 'easeOut' }}
+            transition={{ type: 'keyframes', duration: 1.4, ease: 'easeOut' }}
             className="w-8 h-8 rounded-xl bg-pink-500/30 border border-pink-400 flex items-center justify-center text-pink-300 shadow-[0_0_14px_rgba(244,114,182,0.7)] shrink-0"
           >
             <Heart className="w-4 h-4 fill-pink-400 text-pink-300 animate-pulse" />
@@ -176,7 +176,7 @@ export const PollCompatibilityAnimation: React.FC<PollCompatibilityAnimationProp
               <motion.span
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: [1, 1.22, 1], opacity: 1 }}
-                transition={{ duration: 0.6 }}
+                transition={{ type: 'keyframes', duration: 0.6 }}
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-black bg-pink-500/30 border border-pink-400 text-pink-200 shadow-[0_0_10px_rgba(244,114,182,0.5)]"
               >
                 <Sparkles className="w-2.5 h-2.5 text-pink-300" />
@@ -211,7 +211,7 @@ export const PollCompatibilityAnimation: React.FC<PollCompatibilityAnimationProp
             <motion.span
               key={displayScore}
               animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 0.3 }}
+              transition={{ type: 'keyframes', duration: 0.3 }}
               className="text-sm font-extrabold text-white drop-shadow-[0_0_8px_rgba(244,114,182,0.8)]"
             >
               {displayScore}%
@@ -267,7 +267,7 @@ export const PollCompatibilityAnimation: React.FC<PollCompatibilityAnimationProp
                     />
                     <motion.div
                       animate={{ scale: [1, 1.25, 1], opacity: [0.7, 1, 0.7] }}
-                      transition={{ repeat: Infinity, duration: 2 }}
+                      transition={{ type: 'keyframes', repeat: Infinity, duration: 2 }}
                       className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-pink-500 border border-white flex items-center justify-center text-[9px] text-white font-bold"
                     >
                       ⚡
@@ -286,14 +286,14 @@ export const PollCompatibilityAnimation: React.FC<PollCompatibilityAnimationProp
                     {/* Photon Light Pulse */}
                     <motion.div
                       animate={{ x: ['-45%', '45%', '-45%'] }}
-                      transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
+                      transition={{ type: 'keyframes', repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
                       className="absolute w-8 h-1 bg-gradient-to-r from-transparent via-white to-transparent rounded-full shadow-[0_0_10px_#ffffff]"
                     />
 
                     {/* Central Resonance Badge */}
                     <motion.div
                       animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ repeat: Infinity, duration: 1.8 }}
+                      transition={{ type: 'keyframes', repeat: Infinity, duration: 1.8 }}
                       onClick={handleClose}
                       className="relative z-10 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-pink-950 via-neutral-900 to-cyan-950 border border-pink-400 text-[10px] font-mono font-bold text-pink-200 shadow-[0_0_12px_rgba(244,114,182,0.7)] flex items-center gap-1 cursor-pointer hover:border-pink-300 hover:scale-105 transition-all"
                       title="Click to close resonance animation"
@@ -329,7 +329,7 @@ export const PollCompatibilityAnimation: React.FC<PollCompatibilityAnimationProp
                     />
                     <motion.div
                       animate={{ scale: [1, 1.25, 1], opacity: [0.7, 1, 0.7] }}
-                      transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
+                      transition={{ type: 'keyframes', repeat: Infinity, duration: 2, delay: 0.5 }}
                       className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-cyan-500 border border-white flex items-center justify-center text-[9px] text-white font-bold"
                     >
                       🤝
@@ -357,7 +357,7 @@ export const PollCompatibilityAnimation: React.FC<PollCompatibilityAnimationProp
                     <span className="text-slate-400">➔</span>
                     <motion.span
                       animate={{ scale: [1, 1.15, 1] }}
-                      transition={{ repeat: 3, duration: 0.4 }}
+                      transition={{ type: 'keyframes', repeat: 3, duration: 0.4 }}
                       className={`font-bold ${newTier.color}`}
                     >
                       {newTier.title} 🎉

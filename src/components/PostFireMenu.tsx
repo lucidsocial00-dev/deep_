@@ -190,7 +190,7 @@ export const PostFireMenu: React.FC<PostFireMenuProps> = ({
               )}
             </div>
             <div className="text-[11px] text-slate-400">
-              Fuel power-ups with karma points from your hashtag groups
+              Fuel power-ups with intellectual points from your hashtag groups
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { PostCard } from './components/PostCard';
 import { HashtagTrendsView } from './components/HashtagTrendsView';
@@ -17,7 +17,7 @@ import { MemeCollectorView } from './components/MemeCollectorView';
 import { MusicLibraryView } from './components/MusicLibraryView';
 import { FeedNewPostComposer } from './components/FeedNewPostComposer';
 import { FeedViewsDropdown, FeedFilterMode } from './components/FeedViewsDropdown';
-import { StarfieldWarpOverlay } from './components/StarfieldWarpOverlay';
+import { StarfieldWarpOverlay, WarpSession } from './components/StarfieldWarpOverlay';
 import { AccelerometerHUD } from './components/AccelerometerHUD';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { PDFViewerModal } from './components/PDFViewerModal';
@@ -33,7 +33,6 @@ import { AdultSwimAgeGateModal } from './components/AdultSwimAgeGateModal';
 import { AdultSwimFeedBanner } from './components/AdultSwimFeedBanner';
 import { FindFriendsView } from './components/FindFriendsView';
 import { CityLeaderboardWidget } from './components/CityLeaderboardWidget';
-import { VibeTrendsWidget } from './components/VibeTrendsWidget';
 import { analyzePostVibe } from './utils/sentiment';
 import { CreateQuoteCardModal } from './components/CreateQuoteCardModal';
 import { motion, AnimatePresence } from 'motion/react';
@@ -300,7 +299,7 @@ export default function App() {
     };
   }, []);
   const [friendSearchQuery, setFriendSearchQuery] = useState('');
-  const [warpingTag, setWarpingTag] = useState<string | null>(null);
+  const [warpSession, setWarpSession] = useState<WarpSession | null>(null);
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [toastNotification, setToastNotification] = useState<{
     title: string;
@@ -2594,6 +2593,14 @@ export default function App() {
     });
   };
 
+  // Trigger Feed Warp with fresh session ID every time so consecutive warps always fire
+  const triggerWarp = useCallback((tag: string) => {
+    const clean = tag.replace(/^#+/, '');
+    const formattedTag = `#${clean}`;
+    setWarpSession({ tag: formattedTag, id: Date.now() + Math.random() });
+    setSelectedHashtagFilter(formattedTag);
+  }, []);
+
   // Hashtag / Feed Warp click handler: Warps into the Stream Hub with starfield hyperspace animation
   const handleHashtagClick = (tag: string) => {
     // Clean tag formatting
@@ -2609,8 +2616,7 @@ export default function App() {
       return;
     }
 
-    setWarpingTag(formattedTag);
-    setSelectedHashtagFilter(formattedTag);
+    triggerWarp(formattedTag);
 
     // Locate the matching stream group or create a dynamic sovereign stream
     const cityInfo = getCityForHashtag(clean);
@@ -3103,6 +3109,7 @@ export default function App() {
             onLikePost={handleLikePost}
             onDislikePost={handleDislikePost}
             onAddComment={handleAddComment}
+            onHashtagClick={handleHashtagClick}
             onOpenPdf={(doc) => setActivePdfDoc(doc)}
             onShareToChat={handleShareToChat}
             onSharePost={handleSharePost}
@@ -3954,13 +3961,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Vibe Trends Sidebar Widget - Aggregates real-time emotional sentiment */}
-              <VibeTrendsWidget
-                posts={posts}
-                activeVibeFilter={selectedVibeFilter}
-                onSelectVibeFilter={(vibe) => setSelectedVibeFilter(vibe)}
-              />
-
               {/* City Leaderboard Widget - Shows rank in your city right below suggested friends */}
               <CityLeaderboardWidget
                 currentUser={currentUser}
@@ -4294,6 +4294,7 @@ export default function App() {
       {/* Hashtag Group Hub Detail Modal */}
       {activeGroupDetail && (
         <HashtagGroupDetailModal
+          key={activeGroupDetail.tag}
           group={activeGroupDetail}
           allPosts={posts}
           allUsers={allUsers}
@@ -4327,10 +4328,9 @@ export default function App() {
           }}
           onWarpToMainFeed={(tag) => {
             setActiveGroupDetail(null);
-            const clean = tag.replace(/^#+/, '');
-            setWarpingTag(`#${clean}`);
-            setSelectedHashtagFilter(`#${clean}`);
+            triggerWarp(tag);
             setActiveTab('feed');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         />
       )}
@@ -4395,8 +4395,8 @@ export default function App() {
 
       {/* Starfield Hyperspace Warp Overlay Animation */}
       <StarfieldWarpOverlay
-        activeTag={warpingTag}
-        onWarpComplete={() => setWarpingTag(null)}
+        warpSession={warpSession}
+        onWarpComplete={() => setWarpSession(null)}
       />
 
       {/* 3D Phone Accelerometer HUD & Controls */}

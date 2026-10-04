@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Zap, Sparkles, Compass, MapPin } from 'lucide-react';
+import { Zap, Sparkles } from 'lucide-react';
 import { getCityForHashtag } from '../utils/cityRegions';
 
+export interface WarpSession {
+  tag: string;
+  id: number;
+}
+
 interface StarfieldWarpOverlayProps {
-  activeTag: string | null;
+  warpSession: WarpSession | null;
   onWarpComplete: () => void;
 }
 
@@ -17,26 +22,37 @@ interface Star {
 }
 
 export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
-  activeTag,
+  warpSession,
   onWarpComplete,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
   const [displayedTag, setDisplayedTag] = useState<string>('');
   const [streamCity, setStreamCity] = useState<string>('');
-  const [warpProgress, setWarpProgress] = useState(0); // 0 to 1
+  const [warpProgress, setWarpProgress] = useState(0);
+  const [animatingSessionId, setAnimatingSessionId] = useState<number | null>(null);
+
+  // Stable ref for onWarpComplete callback
+  const onWarpCompleteRef = useRef(onWarpComplete);
+  useEffect(() => {
+    onWarpCompleteRef.current = onWarpComplete;
+  }, [onWarpComplete]);
+
+  const activeTag = warpSession?.tag || null;
+  const sessionId = warpSession?.id || null;
 
   useEffect(() => {
-    if (!activeTag) {
-      setIsVisible(false);
+    if (!activeTag || !sessionId) {
+      setAnimatingSessionId(null);
+      setWarpProgress(0);
       return;
     }
 
+    setAnimatingSessionId(sessionId);
     const clean = activeTag.replace(/^#+/, '');
     const locationInfo = getCityForHashtag(clean);
     setDisplayedTag(activeTag.startsWith('#') ? activeTag : `#${activeTag}`);
     setStreamCity(locationInfo.city || '');
-    setIsVisible(true);
+    setWarpProgress(0.05);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -45,6 +61,7 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
     if (!ctx) return;
 
     let animationFrameId: number;
+    let isCompleted = false;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
@@ -80,29 +97,38 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
     }
 
     const startTime = performance.now();
-    const duration = 1350; // ms
+    const duration = 1200; // ms
+
+    const finishWarp = () => {
+      if (isCompleted) return;
+      isCompleted = true;
+      setAnimatingSessionId(null);
+      setWarpProgress(1);
+      if (onWarpCompleteRef.current) {
+        onWarpCompleteRef.current();
+      }
+    };
+
+    // Safety fallback timer to guarantee warp completion
+    const safetyTimer = setTimeout(() => {
+      finishWarp();
+    }, duration + 150);
 
     const render = (now: number) => {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
       setWarpProgress(progress);
 
-      // Speed curve: Accelerates rapidly, peaks in the middle, then smoothly eases out
       let speed = 4;
       if (progress < 0.3) {
-        // Fast acceleration
         speed = 4 + (progress / 0.3) * 55;
       } else if (progress < 0.75) {
-        // Hyperspace maximum velocity with slight pulsing
         speed = 59 + Math.sin(progress * Math.PI * 8) * 6;
       } else {
-        // Smooth deceleration
         const easeOut = 1 - (progress - 0.75) / 0.25;
         speed = 4 + easeOut * 55;
       }
 
-      // Trail opacity & background clear
-      // When at peak hyperspace, semi-clear to leave glorious speed streaks
       const trailAlpha = progress < 0.2 ? 0.35 : progress < 0.8 ? 0.18 : 0.4;
       ctx.fillStyle = `rgba(0, 0, 0, ${trailAlpha})`;
       ctx.fillRect(0, 0, width, height);
@@ -110,7 +136,6 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
       const cx = width / 2;
       const cy = height / 2;
 
-      // Draw Center Radiant Warp Core safely with positive radius
       const coreFactor = Math.max(0.01, progress < 0.5 ? progress * 2 : Math.max(0, 1 - progress) * 2);
       const coreRadius = Math.max(1, Math.min(width, height) * 0.45 * coreFactor);
 
@@ -129,7 +154,6 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
       ctx.fillStyle = coreGradient;
       ctx.fillRect(0, 0, width, height);
 
-      // Draw expanding hyperspace rings
       if (progress > 0.1 && progress < 0.85) {
         const ringProgress = (progress - 0.1) / 0.75;
         for (let r = 0; r < 3; r++) {
@@ -145,13 +169,11 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
         }
       }
 
-      // Draw & Update 3D Stars
       for (let i = 0; i < stars.length; i++) {
         const star = stars[i];
         star.prevZ = star.z;
         star.z -= speed;
 
-        // Reset stars that pass through camera
         if (star.z <= 1) {
           star.z = 1000;
           star.prevZ = 1000;
@@ -159,7 +181,6 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
           star.y = (Math.random() - 0.5) * height * 2;
         }
 
-        // 3D projection
         const k = 400 / star.z;
         const px = star.x * k + cx;
         const py = star.y * k + cy;
@@ -168,7 +189,6 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
         const prevPx = star.x * prevK + cx;
         const prevPy = star.y * prevK + cy;
 
-        // Skip stars outside viewport
         if (px < -50 || px > width + 50 || py < -50 || py > height + 50) {
           continue;
         }
@@ -177,7 +197,6 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
         const alpha = Math.min(1, Math.max(0.2, (1 - star.z / 1000) * 1.5));
 
         if (speed > 12) {
-          // Draw Warp Streak Lines
           const streakGrad = ctx.createLinearGradient(prevPx, prevPy, px, py);
           streakGrad.addColorStop(0, 'transparent');
           streakGrad.addColorStop(1, star.color);
@@ -190,7 +209,6 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
           ctx.lineCap = 'round';
           ctx.stroke();
         } else {
-          // Draw standard twinkling dot
           ctx.beginPath();
           ctx.arc(px, py, Math.max(0.1, size), 0, Math.PI * 2);
           ctx.fillStyle = star.color;
@@ -203,25 +221,25 @@ export const StarfieldWarpOverlay: React.FC<StarfieldWarpOverlayProps> = ({
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(render);
       } else {
-        // Complete warp animation
-        setIsVisible(false);
-        onWarpComplete();
+        finishWarp();
       }
     };
 
     animationFrameId = requestAnimationFrame(render);
 
     return () => {
+      clearTimeout(safetyTimer);
       window.removeEventListener('resize', handleResize);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, [activeTag, onWarpComplete]);
+  }, [sessionId, activeTag]);
 
+  const isVisible = Boolean(animatingSessionId && activeTag);
   if (!isVisible && !activeTag) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 ${
+      className={`fixed inset-0 z-[9999] pointer-events-none transition-opacity duration-300 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
       aria-hidden="true"

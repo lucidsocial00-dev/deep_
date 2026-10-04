@@ -28,6 +28,7 @@ interface FriendMoodFeedPageProps {
   onLikePost?: (postId: string) => void;
   onDislikePost?: (postId: string) => void;
   onAddComment?: (postId: string, commentText: string) => void;
+  onHashtagClick?: (tag: string) => void;
   onOpenPdf?: (doc: PDFDocument) => void;
   onShareToChat?: (post: Post) => void;
   onSharePost?: (post: Post, method?: 'feed' | 'chat' | 'copy') => void;
@@ -60,6 +61,7 @@ export const FriendMoodFeedPage: React.FC<FriendMoodFeedPageProps> = ({
   onLikePost,
   onDislikePost,
   onAddComment,
+  onHashtagClick,
   onOpenPdf,
   onShareToChat,
   onSharePost,
@@ -410,6 +412,7 @@ export const FriendMoodFeedPage: React.FC<FriendMoodFeedPageProps> = ({
               onLike={(id) => onLikePost?.(id)}
               onDislike={(id) => onDislikePost?.(id)}
               onAddComment={(id, text) => onAddComment?.(id, text)}
+              onHashtagClick={(tag) => onHashtagClick?.(tag)}
               onOpenPdf={(doc) => onOpenPdf?.(doc)}
               onShareToChat={(p) => onShareToChat?.(p)}
               onSharePost={(p, m) => onSharePost?.(p, m)}

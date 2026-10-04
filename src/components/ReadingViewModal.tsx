@@ -292,7 +292,7 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({
       id: notifId,
       points: pts,
       label: `+${pts} Points Added`,
-      sublabel: `Automatically added to #${cleanTag} Karma`,
+      sublabel: `Automatically added to #${cleanTag} Intellectual Points`,
       type,
       hashtag: cleanTag,
       breakdown,
@@ -340,6 +340,7 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({
                 filter: 'blur(10px)',
               }}
               transition={{
+                type: 'keyframes',
                 duration: 3.4,
                 times: [0, 0.12, 0.35, 0.65, 0.88, 1],
                 ease: [0.16, 1, 0.3, 1],
@@ -350,7 +351,7 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({
               <motion.div
                 initial={{ scale: 0.4, opacity: 0.9 }}
                 animate={{ scale: [0.4, 1.8, 2.6], opacity: [0.9, 0.4, 0] }}
-                transition={{ duration: 1.8, ease: 'easeOut' }}
+                transition={{ type: 'keyframes', duration: 1.8, ease: 'easeOut' }}
                 className="absolute -inset-10 rounded-full bg-gradient-to-r from-amber-400/50 via-pink-500/40 to-emerald-400/50 blur-2xl pointer-events-none"
               />
 
@@ -358,7 +359,7 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: [0, 1, 0], scale: [0.5, 1.3, 0.2], y: [-10, -50], x: [-20, -60] }}
-                transition={{ duration: 2.2, delay: 0.1 }}
+                transition={{ type: 'keyframes', duration: 2.2, delay: 0.1 }}
                 className="absolute -top-4 -left-6 text-amber-300 pointer-events-none"
               >
                 <Sparkles className="w-5 h-5 drop-shadow-[0_0_8px_#fbbf24]" />
@@ -366,7 +367,7 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: [0, 1, 0], scale: [0.5, 1.4, 0.2], y: [-10, -55], x: [20, 65] }}
-                transition={{ duration: 2.4, delay: 0.15 }}
+                transition={{ type: 'keyframes', duration: 2.4, delay: 0.15 }}
                 className="absolute -top-3 -right-6 text-emerald-300 pointer-events-none"
               >
                 <Sparkles className="w-5 h-5 drop-shadow-[0_0_8px_#34d399]" />
@@ -744,8 +745,8 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({
                   </div>
                   <p className="text-xs text-slate-400 mt-0.5">
                     {hasReachedEnd || hasClaimed
-                      ? `Congratulations! You've finished reading this longform text. +${readingLink.readingPoints} karma points have been automatically added to #${cleanTag}!`
-                      : `Scroll through to reach 100% — +${readingLink.readingPoints} karma points are credited automatically.`}
+                      ? `Congratulations! You've finished reading this longform text. +${readingLink.readingPoints} intellectual points have been automatically added to #${cleanTag}!`
+                      : `Scroll through to reach 100% — +${readingLink.readingPoints} intellectual points are credited automatically.`}
                   </p>
                 </div>
               </div>
@@ -796,7 +797,7 @@ export const ReadingViewModal: React.FC<ReadingViewModalProps> = ({
           <div className="text-xs">
             <div className="flex items-center gap-2">
               <span className="font-bold text-white">
-                Reading Karma Reward:
+                Reading Intellectual Reward:
               </span>
               <span className="text-amber-300 font-bold font-mono">
                 +{readingLink.readingPoints} pts in #{cleanTag}

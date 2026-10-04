@@ -129,7 +129,7 @@ export const ReadingEstimatorModal: React.FC<ReadingEstimatorModalProps> = ({
               <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                 <span>Reading Time & Group Points Estimator</span>
                 <span className="px-2 py-0.5 rounded-full bg-pink-950/90 text-pink-300 border border-pink-400/40 text-[10px] font-mono">
-                  Smart Karma Engine
+                  Smart Intellectual Points Engine
                 </span>
               </h2>
               <p className="text-xs text-slate-400">

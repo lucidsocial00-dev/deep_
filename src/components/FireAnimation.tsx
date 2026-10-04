@@ -149,7 +149,7 @@ const celebrationBadgeVariants: Variants = {
   },
   animate: {
     opacity: 1,
-    scale: [0.65, 1.08, 0.98, 1],
+    scale: 1,
     y: 0,
     filter: 'blur(0px)',
     transition: {
