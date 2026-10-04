@@ -31,7 +31,7 @@ interface FriendMoodFeedPageProps {
   onHashtagClick?: (tag: string) => void;
   onOpenPdf?: (doc: PDFDocument) => void;
   onShareToChat?: (post: Post) => void;
-  onSharePost?: (post: Post, method?: 'feed' | 'chat' | 'copy') => void;
+  onSharePost?: (post: Post, method?: 'feed' | 'chat' | 'copy' | 'sms') => void;
   onToggleBookmarkPost?: (postId: string, folderId?: string) => void;
   onCreateBookmarkFolder?: (name: string, icon?: string) => void;
   onMuteUser?: (authorId: string) => void;

@@ -17,7 +17,7 @@ interface MemoriesLibraryCombinedViewProps {
   onHashtagClick: (tag: string) => void;
   onOpenPdf: (doc: PDFDocument) => void;
   onShareToChat?: (postOrDoc: Post | PDFDocument | any) => void;
-  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy') => void;
+  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy' | 'sms') => void;
   onShareMemeToFeed?: (postData: { content: string; image?: string; hashtags: string[] }) => void;
   onToggleBookmarkPost: (postId: string, folderId?: string) => void;
   onCreateBookmarkFolder?: (folderName: string, postIdToSave?: string) => void;

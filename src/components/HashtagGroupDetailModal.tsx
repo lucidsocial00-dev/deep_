@@ -50,7 +50,7 @@ interface HashtagGroupDetailModalProps {
   onAddComment: (postId: string, content: string) => void;
   onOpenPdf: (doc: PDFDocument) => void;
   onShareToChat: (item: Post | PDFDocument) => void;
-  onSharePost: (post: Post, method: 'feed' | 'chat' | 'copy') => void;
+  onSharePost: (post: Post, method: 'feed' | 'chat' | 'copy' | 'sms') => void;
   onToggleBookmarkPost: (postId: string) => void;
   onMuteUser?: (userId: string, userName: string, userHandle: string) => void;
   onInspectCompatibility?: (userId: string) => void;
@@ -579,7 +579,14 @@ export const HashtagGroupDetailModal: React.FC<HashtagGroupDetailModalProps> = (
                           onDislike={onDislikePost}
                           onAddComment={onAddComment}
                           onHashtagClick={(tag) => {
-                            // Already in group
+                            if (onHashtagWarp) {
+                              onHashtagWarp(tag);
+                            }
+                          }}
+                          onOpenHashtagGroup={(tag) => {
+                            if (onHashtagWarp) {
+                              onHashtagWarp(tag);
+                            }
                           }}
                           onOpenPdf={onOpenPdf}
                           onShareToChat={onShareToChat}
@@ -859,7 +866,14 @@ export const HashtagGroupDetailModal: React.FC<HashtagGroupDetailModalProps> = (
                             onDislike={onDislikePost}
                             onAddComment={onAddComment}
                             onHashtagClick={(tag) => {
-                              // Already in group
+                              if (onHashtagWarp) {
+                                onHashtagWarp(tag);
+                              }
+                            }}
+                            onOpenHashtagGroup={(tag) => {
+                              if (onHashtagWarp) {
+                                onHashtagWarp(tag);
+                              }
                             }}
                             onOpenPdf={onOpenPdf}
                             onShareToChat={onShareToChat}

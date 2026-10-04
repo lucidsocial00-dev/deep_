@@ -59,7 +59,7 @@ interface EncryptedProfileViewProps {
   onUpdateProfileVault: (updatedUser: User) => void;
   onOpenPdf?: (doc: PDFDocument) => void;
   onShareToChat?: (item: Post | PDFDocument) => void;
-  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy') => void;
+  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy' | 'sms') => void;
   onToggleBookmarkPost?: (postId: string, folderId?: string) => void;
   onCreateBookmarkFolder?: (folderName: string, postIdToSave?: string) => void;
   onToggleBookmarkDoc?: (docId: string) => void;

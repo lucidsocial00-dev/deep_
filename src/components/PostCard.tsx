@@ -3,6 +3,7 @@ import {
   ThumbsUp,
   ThumbsDown,
   MessageCircle,
+  MessageSquare,
   Share2,
   FileText,
   BadgeCheck,
@@ -183,7 +184,7 @@ interface PostCardProps {
   onHashtagClick?: (tag: string) => void;
   onOpenPdf: (doc: PDFDocument) => void;
   onShareToChat?: (post: Post) => void;
-  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy') => void;
+  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy' | 'sms') => void;
   onToggleBookmark?: (postId: string, folderId?: string) => void;
   onCreateBookmarkFolder?: (folderName: string, postIdToSave?: string) => void;
   onMuteUser?: (userId: string, userName: string, userHandle: string) => void;
@@ -795,7 +796,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   }, [showShareMenu, showAuthorMenu, showSaveMenu, showFireMenu]);
 
   // Trigger Share Action & Reward Like
-  const handleTriggerShare = (method: 'feed' | 'chat' | 'copy') => {
+  const handleTriggerShare = (method: 'feed' | 'chat' | 'copy' | 'sms') => {
     setShowShareMenu(false);
 
     // Trigger subtle confetti burst, expanding pulse ring and glowing animation
@@ -820,6 +821,12 @@ export const PostCard: React.FC<PostCardProps> = ({
         `${window.location.origin}/post/${post.id} — "${post.content.slice(0, 80)}..." by ${post.authorName}`
       );
       setTimeout(() => setCopiedLink(false), 2000);
+    }
+
+    if (method === 'sms') {
+      const shareText = `"${post.content}" - ${post.authorName} (${window.location.origin}/post/${post.id})`;
+      const smsUri = `sms:?body=${encodeURIComponent(shareText)}`;
+      window.open(smsUri, '_self');
     }
 
     // Set local delightful reward banner
@@ -2692,6 +2699,18 @@ export const PostCard: React.FC<PostCardProps> = ({
                     <div className="flex-1">
                       <p className="font-semibold">{copiedLink ? 'Link Copied!' : 'Copy Share Link'}</p>
                       <p className="text-[10px] text-slate-400">Copy link & award author +1 like</p>
+                    </div>
+                  </button>
+
+                  {/* Share Option 4: Share via SMS */}
+                  <button
+                    onClick={() => handleTriggerShare('sms')}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left text-xs text-slate-200 hover:text-pink-200 hover:bg-pink-950/40 border border-transparent hover:border-pink-500/30 transition-all group/opt"
+                  >
+                    <MessageSquare className="w-4 h-4 text-pink-400 group-hover/opt:scale-110 transition-transform" />
+                    <div className="flex-1">
+                      <p className="font-semibold">Share via SMS</p>
+                      <p className="text-[10px] text-slate-400">Deep-link to Messages app & award author +1 like</p>
                     </div>
                   </button>
                 </div>

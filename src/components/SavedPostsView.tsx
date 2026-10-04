@@ -36,7 +36,7 @@ interface SavedPostsViewProps {
   onHashtagClick: (tag: string) => void;
   onOpenPdf: (doc: PDFDocument) => void;
   onShareToChat?: (post: Post) => void;
-  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy') => void;
+  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy' | 'sms') => void;
   onToggleBookmarkPost: (postId: string, folderId?: string) => void;
   onCreateBookmarkFolder?: (folderName: string, postIdToSave?: string) => void;
   onToggleSaveSong?: (song: PostSong, postId?: string) => void;

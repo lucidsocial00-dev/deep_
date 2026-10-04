@@ -2090,7 +2090,7 @@ export default function App() {
   };
 
   // Comprehensive Share Post Handler (Rewards Original Author with +1 Like)
-  const handleSharePost = (post: Post, method: 'feed' | 'chat' | 'copy') => {
+  const handleSharePost = (post: Post, method: 'feed' | 'chat' | 'copy' | 'sms') => {
     // 1. Give the original post / poster a like if not already liked
     setPosts((prev) =>
       prev.map((p) => {
@@ -2170,6 +2170,14 @@ export default function App() {
     } else if (method === 'copy') {
       triggerToast(
         'Share Link Copied! 📋',
+        `Awarded +1 Like to ${post.authorName} (${post.authorHandle}) automatically!`
+      );
+    } else if (method === 'sms') {
+      const shareText = `"${post.content}" — ${post.authorName} (${window.location.origin}/post/${post.id})`;
+      const smsUri = `sms:?body=${encodeURIComponent(shareText)}`;
+      window.open(smsUri, '_self');
+      triggerToast(
+        'Opening Messaging App... 📱',
         `Awarded +1 Like to ${post.authorName} (${post.authorHandle}) automatically!`
       );
     }

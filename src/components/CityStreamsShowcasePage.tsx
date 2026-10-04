@@ -186,7 +186,6 @@ export const CityStreamsShowcasePage: React.FC<CityStreamsShowcasePageProps> = (
             <button
               type="button"
               onClick={() => {
-                onClose();
                 onWarpToStreamFeed(cityRegion.highlightTag || cityRegion.name);
               }}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-xs font-semibold shadow-[0_0_12px_rgba(236,72,153,0.4)] transition-all cursor-pointer active:scale-95"
@@ -436,7 +435,6 @@ export const CityStreamsShowcasePage: React.FC<CityStreamsShowcasePageProps> = (
                     onOpenDetail={() => onOpenStreamDetail(filteredStreams[0])}
                     onToggleJoin={() => onToggleJoinGroup(filteredStreams[0].tag)}
                     onWarpFeed={() => {
-                      onClose();
                       onWarpToStreamFeed(filteredStreams[0].tag);
                     }}
                   />
@@ -451,7 +449,6 @@ export const CityStreamsShowcasePage: React.FC<CityStreamsShowcasePageProps> = (
                     onOpenDetail={() => onOpenStreamDetail(filteredStreams[1])}
                     onToggleJoin={() => onToggleJoinGroup(filteredStreams[1].tag)}
                     onWarpFeed={() => {
-                      onClose();
                       onWarpToStreamFeed(filteredStreams[1].tag);
                     }}
                   />
@@ -466,7 +463,6 @@ export const CityStreamsShowcasePage: React.FC<CityStreamsShowcasePageProps> = (
                     onOpenDetail={() => onOpenStreamDetail(filteredStreams[2])}
                     onToggleJoin={() => onToggleJoinGroup(filteredStreams[2].tag)}
                     onWarpFeed={() => {
-                      onClose();
                       onWarpToStreamFeed(filteredStreams[2].tag);
                     }}
                   />
@@ -493,7 +489,6 @@ export const CityStreamsShowcasePage: React.FC<CityStreamsShowcasePageProps> = (
                         onOpenDetail={() => onOpenStreamDetail(stream)}
                         onToggleJoin={() => onToggleJoinGroup(stream.tag)}
                         onWarpFeed={() => {
-                          onClose();
                           onWarpToStreamFeed(stream.tag);
                         }}
                       />
@@ -577,7 +572,6 @@ export const CityStreamsShowcasePage: React.FC<CityStreamsShowcasePageProps> = (
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    onClose();
                                     onWarpToStreamFeed(stream.tag);
                                   }}
                                   className="p-1 rounded-lg bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-slate-400 hover:text-pink-300 transition-colors cursor-pointer"
@@ -650,11 +644,9 @@ export const CityStreamsShowcasePage: React.FC<CityStreamsShowcasePageProps> = (
                       onDislike={onDislikePost || (() => {})}
                       onAddComment={onAddComment || (() => {})}
                       onHashtagClick={(tag) => {
-                        onClose();
                         onWarpToStreamFeed(tag);
                       }}
                       onOpenHashtagGroup={(tag) => {
-                        onClose();
                         onWarpToStreamFeed(tag);
                       }}
                       onOpenPdf={onOpenPdf}

@@ -31,7 +31,7 @@ interface MusicLibraryViewProps {
   onToggleSaveSong: (song: PostSong, postId?: string) => void;
   onAddWaveformComment?: (songId: string, comment: WaveformComment, postId?: string) => void;
   onShareToChat?: (item: any) => void;
-  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy') => void;
+  onSharePost?: (post: Post, method: 'feed' | 'chat' | 'copy' | 'sms') => void;
   onNavigateToFeed?: () => void;
   onHashtagClick?: (tag: string) => void;
 }
